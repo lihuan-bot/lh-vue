@@ -4,18 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node scripts/dev.js reactivity -f esm"
+    "dev": "node scripts/dev.js reactivity -f esm",
+    "prepare": "husky install"
   },
   "type": "module",
   "author": "",
   "license": "ISC",
   "lint-staged": {
-    "*.js": [
-      "prettier --write"
-    ],
     "*.ts?(x)": [
       "prettier --parser=typescript --write"
-    ]
+    ],
+    "*.{js,css,md}": "prettier --write"
   },
   "dependencies": {
     "vue": "^3.2.47"
