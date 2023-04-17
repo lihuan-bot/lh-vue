@@ -9,7 +9,7 @@
     "resolveJsonModule": true,
     "esModuleInterop": true, // 允许通过es6引入commonjs
     "jsx": "preserve",
-    "lib": ["ESNext","dom"],
+    "lib": ["ESNext", "dom"],
     "baseUrl": ".",
     "paths": {
       "@lhvue/*": ["packages/*/src"]

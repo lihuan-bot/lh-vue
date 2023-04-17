@@ -4,7 +4,7 @@
   "main": "index.js",
   "module": "dist/shared.esm-bundler.js",
   "buildOptions": {
-    "formats":[
+    "formats": [
       "esm-bundler",
       "cjs"
     ]

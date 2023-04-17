@@ -7,40 +7,47 @@
  */
 import esbuild from 'esbuild'
 import minimist from 'minimist'
-import { resolve } from 'path'
 import { fileURLToPath } from 'node:url'
-import { dirname } from 'node:path'
+import { dirname, resolve } from 'node:path'
 
 // 获取 __dirname 的 ESM 写法
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const args = minimist(process.argv.slice(2))
 
-const target = args._[0] || "reactivity"
-const format = args.f || "global"
+const target = args._[0] || 'reactivity'
+const format = args.f || 'global'
 const pkg = resolve(__dirname, `../packages/${target}/package.json`)
-const outputFormat = format.startsWith("global") ? "iife" : format === "cjs" ? "cjs" : "esm"
+const outputFormat = format.startsWith('global')
+  ? 'iife'
+  : format === 'cjs'
+  ? 'cjs'
+  : 'esm'
 // 输出文件名 eg: reactivity.esm.js
-const outfile = resolve(__dirname, `../packages/${target}/dist/${target}.${format}.js`)
+const outfile = resolve(
+  __dirname,
+  `../packages/${target}/dist/${target}.${format}.js`
+)
 
-const plugins = [{
+const plugins = [
+  {
     name: 'esbuild-watch-log-plugin',
     setup(build) {
-        build.onEnd(({ errors }) => {
-            if (!errors.length) {
-                console.log('waiting for change')
-            }
-
-        });
-    },
-}];
+      build.onEnd(({ errors }) => {
+        if (!errors.length) {
+          console.log('waiting for change')
+        }
+      })
+    }
+  }
+]
 const context = await esbuild.context({
-    entryPoints: [resolve(__dirname, `../packages/${target}/src/index.ts`)],
-    outfile,
-    bundle: true,
-    sourcemap: true,
-    format: outputFormat,
-    globalName: pkg.buildOptions?.name,
-    platform: format === "cjs" ? "node" : "browser",
-    plugins
+  entryPoints: [resolve(__dirname, `../packages/${target}/src/index.ts`)],
+  outfile,
+  bundle: true,
+  sourcemap: true,
+  format: outputFormat,
+  globalName: pkg.buildOptions?.name,
+  platform: format === 'cjs' ? 'node' : 'browser',
+  plugins
 })
 await context.watch()
