@@ -1,0 +1,33 @@
+<!--
+ * @Author: lihuan
+ * @Date: 2023-04-17 10:16:25
+ * @LastEditors: lihuan
+ * @LastEditTime: 2023-04-17 14:52:25
+ * @Email: 17719495105@163.com
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script type="module">
+
+      // import {reactive,effect} from '/node_modules/vue/dist/vue.runtime.esm-browser.js'
+      import { reactive,effect } from '../dist/reactivity.esm.js'
+
+      const state = reactive({a:1})
+      effect(()=> {
+        console.log(state.a)
+      })
+
+      setTimeout(()=> {
+        state.a = 2
+      },1000)
+      
+    </script>
+  </body>
+</html>
