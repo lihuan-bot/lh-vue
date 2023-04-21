@@ -2,13 +2,25 @@
  * @Author: lihuan
  * @Date: 2023-04-21 10:36:21
  * @LastEditors: lihuan
- * @LastEditTime: 2023-04-21 11:21:03
+ * @LastEditTime: 2023-04-21 15:10:21
  * @Email: 17719495105@163.com
  */
+import { hasOwn, isArray } from '@lhvue/shared'
 import { track, trigger } from './effect'
 import { TrackOpTypes, TriggerOpTypes } from './operations'
+import { ReactiveFlags } from './reactive'
 
 const get = createGetter()
+const arrayInstrumentations = /*#__PURE__*/ createArrayInstrumentations()
+function createArrayInstrumentations() {
+  const instrumentations = {}
+  ;['includes', 'indexOf', 'lastIndexOf'].forEach(key => {
+    instrumentations[key] = function (this, ...args) {
+      console.log(this, 'this', args)
+    }
+  })
+  return instrumentations
+}
 function createGetter(isReadonly = false, shallow = false) {
   return function get(target, key, receiver) {
     /**
@@ -24,6 +36,12 @@ function createGetter(isReadonly = false, shallow = false) {
      *      }
      *  console.log(person.newName)
      */
+
+    const targetIsArray = isArray(target)
+
+    if (!isReadonly && targetIsArray && hasOwn(arrayInstrumentations, key)) {
+      return Reflect.get(arrayInstrumentations, key, receiver)
+    }
     const res = Reflect.get(target, key, receiver)
     // 收集依赖
     track(target, TrackOpTypes.GET, key, res)

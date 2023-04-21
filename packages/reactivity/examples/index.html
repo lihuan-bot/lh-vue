@@ -2,7 +2,7 @@
  * @Author: lihuan
  * @Date: 2023-04-17 10:16:25
  * @LastEditors: lihuan
- * @LastEditTime: 2023-04-19 15:17:31
+ * @LastEditTime: 2023-04-21 15:03:19
  * @Email: 17719495105@163.com
 -->
 <!DOCTYPE html>
@@ -18,14 +18,28 @@
 
       // import {reactive,effect} from '/node_modules/vue/dist/vue.runtime.esm-browser.js'
       import { reactive,effect } from '../dist/reactivity.esm.js'
-      const state = reactive({a:1})
+      const state = reactive([1,2])
+     
       effect(()=> {
-        console.log(state.a)
-      })
+        console.log(state[1])
 
+      })
+      state.aaa = 'aaa'
       setTimeout(()=> {
-        state.a = 2
+        // state[0] = 100
+        state.includes(100)
       },1000)
+
+
+      // const state1 = reactive({a:1})
+      // const state2 = reactive(state1)
+      // effect(()=> {
+      //   console.log(state2.a)
+      // })
+
+      // setTimeout(()=> {
+      //   state2.a = 10
+      // },1000)
       
     </script>
   </body>

@@ -2,7 +2,7 @@
  * @Author: lihuan
  * @Date: 2023-04-17 14:48:07
  * @LastEditors: lihuan
- * @LastEditTime: 2023-04-19 14:02:06
+ * @LastEditTime: 2023-04-21 15:05:40
  * @Email: 17719495105@163.com
  */
 import { isArray } from '@lhvue/shared'
@@ -47,13 +47,14 @@ export function trackEffects(dep) {
 }
 export function trigger(target, type, key, newVal, oldVal) {
   const depsMap = targetMap.get(target)
+  if (!depsMap) return
   const dep = depsMap.get(key)
   triggerEffects(dep)
 }
 
 export function triggerEffects(dep) {
   // dep 是数组或者是Set
-  for (const effect of isArray(dep) ? dep : [...dep]) {
+  for (const effect of isArray(dep) ? dep : [...(dep || [])]) {
     if (effect !== activeEffect) {
       if (effect.scheduler) {
         effect.scheduler()

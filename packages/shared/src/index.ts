@@ -2,7 +2,7 @@
  * @Author: lihuan
  * @Date: 2023-04-16 13:38:20
  * @LastEditors: lihuan
- * @LastEditTime: 2023-04-21 11:07:02
+ * @LastEditTime: 2023-04-21 13:45:48
  * @Email: 17719495105@163.com
  */
 export const isObject = (val: unknown) => val !== null && typeof val === 'object'
@@ -15,3 +15,5 @@ export const toTypeString = (value: unknown): string => objectToString.call(valu
 export const toRawType = (value: unknown): string => {
   return toTypeString(value).slice(8, -1)
 }
+const hasOwnProperty = Object.prototype.hasOwnProperty
+export const hasOwn = (val: object, key: string | symbol): key is keyof typeof val => hasOwnProperty.call(val, key)
