@@ -1,3 +1,11 @@
+/*
+ * @Author: lihuan
+ * @Date: 2023-04-17 14:48:07
+ * @LastEditors: lihuan
+ * @LastEditTime: 2023-04-19 14:02:06
+ * @Email: 17719495105@163.com
+ */
+import { isArray } from '@lhvue/shared'
 import { createDep } from './dep'
 
 let activeEffect = null
@@ -19,7 +27,7 @@ class ReactiveEffect {
   }
 }
 
-export function track(target, key, oldVal) {
+export function track(target, type, key, oldVal) {
   let depsMap = targetMap.get(target)
   if (!depsMap) {
     targetMap.set(target, (depsMap = new Map()))
@@ -37,14 +45,21 @@ export function trackEffects(dep) {
     dep.add(activeEffect)
   }
 }
-export function trigger(target, key, newVal, oldVal) {
+export function trigger(target, type, key, newVal, oldVal) {
   const depsMap = targetMap.get(target)
   const dep = depsMap.get(key)
-  if (dep.size > 0) {
-    for (const effect of dep) {
+  triggerEffects(dep)
+}
+
+export function triggerEffects(dep) {
+  // dep 是数组或者是Set
+  for (const effect of isArray(dep) ? dep : [...dep]) {
+    if (effect !== activeEffect) {
       if (effect.scheduler) {
         effect.scheduler()
-      } else effect.run()
+      } else {
+        effect.run()
+      }
     }
   }
 }
