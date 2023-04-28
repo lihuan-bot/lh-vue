@@ -2,7 +2,7 @@
  * @Author: lihuan
  * @Date: 2023-04-17 14:48:07
  * @LastEditors: lihuan
- * @LastEditTime: 2023-04-21 15:05:40
+ * @LastEditTime: 2023-04-25 10:45:17
  * @Email: 17719495105@163.com
  */
 import { isArray } from '@lhvue/shared'
@@ -27,7 +27,8 @@ class ReactiveEffect {
   }
 }
 
-export function track(target, type, key, oldVal) {
+export function track(target, type, key, oldVal?) {
+  if (!activeEffect) return
   let depsMap = targetMap.get(target)
   if (!depsMap) {
     targetMap.set(target, (depsMap = new Map()))

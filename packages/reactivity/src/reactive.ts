@@ -2,11 +2,12 @@
  * @Author: lihuan
  * @Date: 2023-04-16 13:38:16
  * @LastEditors: lihuan
- * @LastEditTime: 2023-04-21 14:23:45
+ * @LastEditTime: 2023-04-28 14:00:44
  * @Email: 17719495105@163.com
  */
 import { isObject, toRawType } from '@lhvue/shared'
-import { mutableHandlers, mutableCollectionHandlers } from './baseHandlers'
+import { mutableHandlers } from './baseHandlers'
+import { mutableCollectionHandlers } from './collectionHandlers'
 
 export const enum ReactiveFlags {
   SKIP = '__v_skip',
@@ -19,7 +20,7 @@ const enum TargetType {
   COMMON = 1,
   COLLECTION = 2
 }
-const reactiveMap = new WeakMap()
+export const reactiveMap = new WeakMap()
 export function reactive(target) {
   if (target && target[ReactiveFlags.IS_READONLY]) return target
   return createReactiveObject(target, false, mutableHandlers, mutableCollectionHandlers, reactiveMap)
@@ -59,4 +60,9 @@ function targetTypeMap(rawType: string) {
 }
 function getTargetType(value) {
   return value[ReactiveFlags.SKIP] || !Object.isExtensible(value) ? TargetType.INVALID : targetTypeMap(toRawType(value))
+}
+
+export function toRaw(observed) {
+  const raw = observed && observed[ReactiveFlags.RAW]
+  return raw ? toRaw(raw) : observed
 }
