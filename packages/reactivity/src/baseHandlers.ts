@@ -2,10 +2,10 @@
  * @Author: lihuan
  * @Date: 2023-04-21 10:36:21
  * @LastEditors: lihuan
- * @LastEditTime: 2023-04-28 14:05:19
+ * @LastEditTime: 2023-05-04 09:55:53
  * @Email: 17719495105@163.com
  */
-import { hasOwn, isArray } from '@lhvue/shared'
+import { hasChanged, hasOwn, isArray, isIntegerKey } from '@lhvue/shared'
 import { track, trigger } from './effect'
 import { TrackOpTypes, TriggerOpTypes } from './operations'
 import { ReactiveFlags, reactiveMap, toRaw } from './reactive'
@@ -64,8 +64,20 @@ function createGetter(isReadonly = false, shallow = false) {
 const set = createSetter()
 function createSetter(isReadonly = false, shallow = false) {
   return function set(target, key, value, receiver) {
+    let oldValue = target[key]
+    value = toRaw(value)
+    oldValue = toRaw(oldValue)
+    const hadKey = isArray(target) && isIntegerKey(key) ? Number(key) < target.length : hasOwn(target, key)
+
     const res = Reflect.set(target, key, value, receiver)
-    trigger(target, TriggerOpTypes.SET, key, value, res)
+
+    if (target === toRaw(receiver)) {
+      if (!hadKey) {
+        trigger(target, TriggerOpTypes.ADD, key, value)
+      } else if (hasChanged(value, oldValue)) {
+        trigger(target, TriggerOpTypes.SET, key, value, oldValue)
+      }
+    }
     return res
   }
 }

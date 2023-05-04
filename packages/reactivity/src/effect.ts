@@ -2,7 +2,7 @@
  * @Author: lihuan
  * @Date: 2023-04-17 14:48:07
  * @LastEditors: lihuan
- * @LastEditTime: 2023-04-25 10:45:17
+ * @LastEditTime: 2023-04-28 14:21:09
  * @Email: 17719495105@163.com
  */
 import { isArray } from '@lhvue/shared'
@@ -46,7 +46,7 @@ export function trackEffects(dep) {
     dep.add(activeEffect)
   }
 }
-export function trigger(target, type, key, newVal, oldVal) {
+export function trigger(target, type, key, newVal, oldVal?) {
   const depsMap = targetMap.get(target)
   if (!depsMap) return
   const dep = depsMap.get(key)
