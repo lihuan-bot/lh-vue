@@ -2,9 +2,11 @@
  * @Author: lihuan
  * @Date: 2023-04-16 13:38:20
  * @LastEditors: lihuan
- * @LastEditTime: 2023-04-28 14:21:49
+ * @LastEditTime: 2023-05-05 10:33:26
  * @Email: 17719495105@163.com
  */
+export * from './shapeFlags'
+
 export const isObject = (val: unknown) => val !== null && typeof val === 'object'
 
 export const isArray = (val: unknown) => Array.isArray(val)
