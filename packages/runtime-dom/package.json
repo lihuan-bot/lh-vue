@@ -1,0 +1,25 @@
+{
+    "name": "@lhvue/runtime-dom",
+    "version": "1.0.0",
+    "main": "index.js",
+    "module": "dist/runtime-dom.esm-bundler.js",
+    "types": "dist/runtime-dom.d.ts",
+    "unpkg": "dist/runtime-dom.global.js",
+    "files": [
+      "index.js",
+      "dist"
+    ],
+    "buildOptions": {
+        "name": "VueRuntimeDOM",
+        "formats": [
+          "esm-bundler",
+          "esm-browser",
+          "cjs",
+          "global"
+        ]
+      },
+    "dependencies": {
+      "@lhvue/shared": "workspace:^1.0.0"
+    }
+  }
+  
