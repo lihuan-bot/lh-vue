@@ -2,7 +2,7 @@
  * @Author: lihuan
  * @Date: 2023-05-06 15:09:06
  * @LastEditors: lihuan
- * @LastEditTime: 2023-05-12 11:26:05
+ * @LastEditTime: 2023-05-12 23:24:26
  * @Email: 17719495105@163.com
  */
 import { extend } from '@lhvue/shared'
@@ -20,3 +20,5 @@ function ensureRenderer() {
 export const render = ((...args) => {
   ensureRenderer().render(...args)
 }) as RootRenderFunction
+
+export * from '@lhvue/runtime-core'

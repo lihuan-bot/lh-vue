@@ -29,6 +29,21 @@ importers:
     dependencies:
       '@lhvue/shared': link:../shared
 
+  packages/runtime-core:
+    specifiers:
+      '@lhvue/shared': workspace:^1.0.0
+    dependencies:
+      '@lhvue/shared': link:../shared
+
+  packages/runtime-dom:
+    specifiers:
+      '@lhvue/shared': workspace:^1.0.0
+    dependencies:
+      '@lhvue/shared': link:../shared
+
+  packages/shared:
+    specifiers: {}
+
 packages:
 
   registry.npmmirror.com/@babel/parser/7.21.4:

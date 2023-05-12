@@ -2,7 +2,7 @@
  * @Author: lihuan
  * @Date: 2023-05-04 10:16:30
  * @LastEditors: lihuan
- * @LastEditTime: 2023-05-05 10:53:27
+ * @LastEditTime: 2023-05-12 23:29:34
  * @Email: 17719495105@163.com
  */
 
@@ -24,7 +24,7 @@ export const createVNode = (
     props,
     children,
     shapeFlag,
-    key: props.key,
+    key: props?.key,
     el: null // 对应的真实节点
   }
   if (children) {
