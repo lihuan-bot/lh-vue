@@ -1,13 +1,13 @@
-import { ShapeFlags } from '@lhvue/shared'
-import { isSameVNode } from './vnodes'
-
 /*
  * @Author: lihuan
  * @Date: 2023-05-06 17:16:28
  * @LastEditors: lihuan
- * @LastEditTime: 2023-05-13 11:32:08
+ * @LastEditTime: 2023-05-13 23:00:31
  * @Email: 17719495105@163.com
  */
+import { ShapeFlags } from '@lhvue/shared'
+import { isSameVNode } from './vnodes'
+
 export const createRenderer = options => {
   const {
     insert: hostInsert,
@@ -76,14 +76,33 @@ export const createRenderer = options => {
     const c2 = n2.children
     const preShapeFlag = n1.shapeFlag
     const shapeFlag = n2.shapeFlag
-    debugger
+    // 新的儿子是文本  旧的是 文本(更新文本) 数组(删除老儿子，设置文本内容) 空(更新文本即可)
     if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
+      // 数组
       if (preShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
         unmountChildren(c1)
       }
+      // 文本  空
       if (c1 !== c2) {
         // 文本内容不同
         hostSetElementText(el, c2)
+      }
+    } else {
+      // 老的儿子是数组 新的是数组
+      if (preShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+        if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+          // 最复杂的diff 新老都是数组
+        } else {
+          // 老的是数组 新的不是数组 删除老的
+          unmountChildren(c1)
+        }
+      } else {
+        if (preShapeFlag & ShapeFlags.TEXT_CHILDREN) {
+          hostSetElementText(el, '')
+        }
+        if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+          mountChildren(c2, el)
+        }
       }
     }
   }
