@@ -2,7 +2,7 @@
  * @Author: lihuan
  * @Date: 2023-05-04 10:16:30
  * @LastEditors: lihuan
- * @LastEditTime: 2023-05-12 23:29:34
+ * @LastEditTime: 2023-05-13 09:44:04
  * @Email: 17719495105@163.com
  */
 
@@ -44,3 +44,4 @@ export const createVNode = (
 export function isVNode(value: any) {
   return value ? value.__v_isVNode === true : false
 }
+export const isSameVNode = (n1, n2) => n1.type === n2.type && n1.key === n2.key

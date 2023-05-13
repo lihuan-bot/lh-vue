@@ -2,7 +2,7 @@
  * @Author: lihuan
  * @Date: 2023-05-12 23:14:17
  * @LastEditors: lihuan
- * @LastEditTime: 2023-05-12 23:25:39
+ * @LastEditTime: 2023-05-13 11:31:39
  * @Email: 17719495105@163.com
 -->
 
@@ -20,8 +20,28 @@
 
       // import { h,render } from '/node_modules/vue/dist/vue.runtime.esm-browser.js'
       import { h, render } from '../dist/runtime-dom.esm.js'
-      render(h('div',{style:{color: 'red'}},1111),app)
-      
+      //  // 1、渲染 和 卸载
+      // render(h('div',{style:{color: 'red'}},1111),app)
+      // setTimeout(() => {
+      //   render(null,app)
+      // }, 1000);
+      // //2、 不同类型
+      // render(h('div',{style:{color: 'red'}},1111),app)
+      // setTimeout(() => {
+      //   render(h('p',{style:{color: 'red'}},2222),app)
+      // }, 1000);
+
+        // //3、更新属性
+      // render(h('div',{style:{color: 'red'}},1111),app)
+      // setTimeout(() => {
+      //   render(h('div',{style:{color: '#000'}},1111),app)
+      // }, 1000);
+
+        // 4、diff
+        render(h('div',1111),app)
+      setTimeout(() => {
+        render(h('div',2222),app)
+      }, 1000);
     </script>
   </body>
 </html>
