@@ -2,7 +2,7 @@
  * @Author: lihuan
  * @Date: 2023-05-06 17:16:28
  * @LastEditors: lihuan
- * @LastEditTime: 2023-05-13 23:00:31
+ * @LastEditTime: 2023-05-14 12:25:10
  * @Email: 17719495105@163.com
  */
 import { ShapeFlags } from '@lhvue/shared'
@@ -32,7 +32,7 @@ export const createRenderer = options => {
       unmount(children[i])
     }
   }
-  const mountElement = (vnode, container) => {
+  const mountElement = (vnode, container, anchor) => {
     const { type, props, children, shapeFlag } = vnode
     // 创建真实节点
     const el = (vnode.el = hostCreateElement(type))
@@ -49,7 +49,7 @@ export const createRenderer = options => {
       // 文本
       hostSetElementText(el, children)
     }
-    hostInsert(el, container)
+    hostInsert(el, container, anchor)
   }
   const patchProps = (oldProps, newProps, el) => {
     if (oldProps !== newProps) {
@@ -67,6 +67,61 @@ export const createRenderer = options => {
           const pre = oldProps[key]
           hostPatchProp(el, key, pre, null)
         }
+      }
+    }
+  }
+  const patchKeyedChildren = (c1, c2, el) => {
+    // 全量diff(比较耗性能) 对比过程是深度遍历 先父后子 从父到子都要对比一遍
+    // 没有优化对比 只关心变化的部分 blockTree  patchFlags
+    // 同级对比 父和父 子和子 采用深度遍历
+
+    let i = 0
+    let e1 = c1.length - 1
+    let e2 = c2.length - 1
+    // a b c
+    // a b c d
+    // i = 0 e1 = 2 e2 =3
+    // 从前向后
+    while (i <= e1 && i <= e2) {
+      const n1 = c1[i]
+      const n2 = c2[i]
+      if (isSameVNode(n1, n2)) {
+        patch(n1, n2, el) // 深度遍历
+      } else {
+        // a b e
+        // a b c d
+        break
+      }
+      i++
+    }
+    // 从后向前
+    while (i <= e1 && i <= e2) {
+      const n1 = c1[e1]
+      const n2 = c2[e2]
+      if (isSameVNode(n1, n2)) {
+        patch(n1, n2, el)
+      } else {
+        break
+      }
+      e1--
+      e2--
+    }
+    //同序列挂载
+    if (i > e1) {
+      // 有新增节点
+      if (i <= e2) {
+        // 如果e2往前移动了 那么e2的下一个值肯定存在  那就向前插入
+        // 如果没动 那么e2下一个是空 那就是向后插入
+        const newPos = e2 + 1
+        // v2 中 看下一个元素是否存在 v3 看长度是否越界
+        const anchor = newPos < c2.length ? c2[newPos].el : null
+        patch(null, c2[i], el, anchor)
+        i++
+      }
+    } else if (i > e2) {
+      while (i <= e1) {
+        unmount(c1[i])
+        i++
       }
     }
   }
@@ -92,6 +147,7 @@ export const createRenderer = options => {
       if (preShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
         if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
           // 最复杂的diff 新老都是数组
+          patchKeyedChildren(c1, c2, el)
         } else {
           // 老的是数组 新的不是数组 删除老的
           unmountChildren(c1)
@@ -115,23 +171,23 @@ export const createRenderer = options => {
     patchProps(oldProps, newProps, el)
     patchChildren(n1, n2, el)
   }
-  const processElement = (n1, n2, container) => {
+  const processElement = (n1, n2, container, anchor) => {
     if (n1 === null) {
-      mountElement(n2, container)
+      mountElement(n2, container, anchor)
     } else {
       // diff
 
       patchElement(n1, n2)
     }
   }
-  const patch = (n1, n2, container) => {
+  const patch = (n1, n2, container, anchor = null) => {
     if (n1 === n2) return
     // 类型不一样 n1 div => n2 p 删除n1 挂载n2
     if (n1 && !isSameVNode(n1, n2)) {
       unmount(n1)
       n1 = null
     }
-    processElement(n1, n2, container)
+    processElement(n1, n2, container, anchor)
   }
   const unmount = vnode => hostRemove(vnode.el)
   const render = (vnode, container, isSVG) => {

@@ -2,7 +2,7 @@
  * @Author: lihuan
  * @Date: 2023-05-12 23:14:17
  * @LastEditors: lihuan
- * @LastEditTime: 2023-05-13 11:31:39
+ * @LastEditTime: 2023-05-14 12:27:02
  * @Email: 17719495105@163.com
 -->
 
@@ -37,10 +37,51 @@
       //   render(h('div',{style:{color: '#000'}},1111),app)
       // }, 1000);
 
-        // 4、diff
-        render(h('div',1111),app)
+        // 4.1、diff
+      //   render(h('div',1111),app)
+      // setTimeout(() => {
+      //   render(h('div',2222),app)
+      // }, 1000);
+      
+      // //4.2、diff
+      // render(h('div',[
+      //   h('li',{key: 'a'},'a'),
+      //   h('li',{key: 'b'},'b'),
+      //   h('li',{key: 'c'},'c'),
+      // ]),app)
+      // setTimeout(() => {
+      //   render(h('div',[
+      //   h('li',{key: 'a'},'a'),
+      //   h('li',{key: 'b'},'b'),
+      //   h('li',{key: 'c'},'c'),
+      //   h('li',{key: 'd'},'d'),
+      // ]),app)
+      // }, 1000);
+      //  //4.3、diff 确定 anchor
+      //  render(h('div',[
+      //   h('li',{key: 'a'},'a'),
+      //   h('li',{key: 'b'},'b'),
+      //   h('li',{key: 'c'},'c'),
+      // ]),app)
+      // setTimeout(() => {
+      //   render(h('div',[
+      //   h('li',{key: 'd'},'d'),
+      //   h('li',{key: 'a'},'a'),
+      //   h('li',{key: 'b'},'b'),
+      //   h('li',{key: 'c'},'c'),
+      // ]),app)
+      // }, 1000);
+       //4.4、diff 
+       render(h('div',[
+        h('li',{key: 'a'},'a'),
+        h('li',{key: 'b'},'b'),
+        h('li',{key: 'c'},'c'),
+      ]),app)
       setTimeout(() => {
-        render(h('div',2222),app)
+        render(h('div',[
+        h('li',{key: 'a'},'a'),
+        h('li',{key: 'b'},'b'),
+      ]),app)
       }, 1000);
     </script>
   </body>
